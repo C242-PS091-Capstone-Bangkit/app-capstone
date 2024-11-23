@@ -1,4 +1,4 @@
-package com.dicoding.skinalyzecapstone.ui.History
+package com.dicoding.skinalyzecapstone.ui.history
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

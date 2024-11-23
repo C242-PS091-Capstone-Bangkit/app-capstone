@@ -1,4 +1,4 @@
-package com.dicoding.skinalyzecapstone.ui.History
+package com.dicoding.skinalyzecapstone.ui.history
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -5,6 +5,15 @@
     <string name="title_history">History</string>
     <string name="title_profile">Profile</string>
     <string name="title_scan">Scan Now</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="sign_up">I don\'t have an account</string>
+    <string name="gallery">Gallery</string>
+    <string name="camera">Camera</string>
+    <string name="scan_now">Scan Now</string>
+    <string name="empty_image_warning">Please select an image to analyze.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
