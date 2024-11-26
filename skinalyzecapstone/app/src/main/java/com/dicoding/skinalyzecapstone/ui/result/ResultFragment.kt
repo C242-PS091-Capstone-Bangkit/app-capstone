@@ -1,4 +1,4 @@
-package com.dicoding.skinalyzecapstone.ui.result;
+package com.dicoding.skinalyzecapstone.ui.result
 
 
 import android.net.Uri
