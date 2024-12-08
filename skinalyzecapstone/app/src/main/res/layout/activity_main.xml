@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/lavender"
+        android:background="@color/pink"
         app:fabCradleMargin="16dp"
         app:fabCradleRoundedCornerRadius="28dp"
         app:fabCradleVerticalOffset="10dp"
@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_anchor="@id/bottom_app_bar"
-        android:backgroundTint="@color/lavender"
+        android:backgroundTint="@color/pink"
         android:src="@drawable/scanner"
         app:tint="@color/white" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,7 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.dicoding.skinalyzecapstone.R
 import com.dicoding.skinalyzecapstone.databinding.FragmentScanBinding
 import com.dicoding.skinalyzecapstone.getImageUri
-import com.dicoding.skinalyzecapstone.ui.result.ResultFragment
+import com.dicoding.skinalyzecapstone.ui.result.ResultActivity
 
 class ScanFragment : Fragment() {
 
@@ -46,7 +45,7 @@ class ScanFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the fragment layout and set up binding
         binding = FragmentScanBinding.inflate(inflater, container, false)
 
@@ -103,16 +102,11 @@ class ScanFragment : Fragment() {
     }
 
     private fun analyzeImage(uri: Uri) {
-        val resultFragment = ResultFragment().apply {
-            arguments = Bundle().apply {
-                putString(ResultFragment.ARG_IMAGE_URI, currentImageUri.toString())
-            }
+        // Navigate to ResultActivity
+        val intent = Intent(requireContext(), ResultActivity::class.java).apply {
+            putExtra(ResultActivity.EXTRA_IMAGE_URI, uri.toString())
         }
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.nav_host_fragment_activity_main, resultFragment)
-            .addToBackStack(null)
-            .commit()
-
+        startActivity(intent)
     }
 
     private fun showToast(message: String) {
