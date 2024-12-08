@@ -109,9 +109,10 @@ class ScanFragment : Fragment() {
             }
         }
         parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, resultFragment)
+            .replace(R.id.nav_host_fragment_activity_main, resultFragment)
             .addToBackStack(null)
             .commit()
+
     }
 
     private fun showToast(message: String) {

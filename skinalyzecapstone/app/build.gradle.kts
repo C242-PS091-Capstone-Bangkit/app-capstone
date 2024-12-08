@@ -79,9 +79,9 @@ dependencies {
     implementation(libs.tensorflow.lite.gpu)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
-    val cameraxVersion = "1.3.0"
+    val cameraxVersion = "1.4.0"
     implementation("androidx.camera:camera-camera2:$cameraxVersion")
-    implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
+    implementation(libs.androidx.camera.lifecycle)
     implementation("androidx.camera:camera-view:$cameraxVersion")
     implementation(libs.tensorflow.lite.task.vision)
     debugImplementation(libs.androidx.ui.tooling)
