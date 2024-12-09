@@ -20,6 +20,12 @@
         android:theme="@style/Theme.Skinalyzecapstone"
         tools:targetApi="31">
         <activity
+            android:name=".ui.profile.EditUsername"
+            android:exported="false" />
+        <activity
+            android:name=".ui.profile.EditProfile"
+            android:exported="false" />
+        <activity
             android:name=".ui.result.ResultActivity"
             android:exported="false" />
         <activity
