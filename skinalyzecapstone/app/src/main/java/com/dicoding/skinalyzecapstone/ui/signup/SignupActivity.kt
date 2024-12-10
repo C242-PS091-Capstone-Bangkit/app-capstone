@@ -1,18 +1,35 @@
 package com.dicoding.skinalyzecapstone.ui.signup
 
+
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.datastore.preferences.preferencesDataStore
 import com.dicoding.skinalyzecapstone.R
+import com.dicoding.skinalyzecapstone.data.UserRepository
+import com.dicoding.skinalyzecapstone.data.api.ApiConfig
+import com.dicoding.skinalyzecapstone.data.pref.UserPreference
 import com.dicoding.skinalyzecapstone.databinding.ActivitySignupBinding
+import com.dicoding.skinalyzecapstone.ui.ViewModelFactory
+import com.dicoding.skinalyzecapstone.ui.login.LoginActivity
 
 class SignupActivity : AppCompatActivity() {
-
+    val AppCompatActivity.dataStore by preferencesDataStore(name = "user_preferences")
     private lateinit var binding: ActivitySignupBinding
+    private val signupViewModel: SignupViewModel by viewModels {
+        ViewModelFactory(
+            UserRepository(
+                UserPreference.getInstance(dataStore), // Pastikan dataStore sudah diinisialisasi di Application
+                ApiConfig.getApiService()
+            )
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +38,7 @@ class SignupActivity : AppCompatActivity() {
 
         setupView()
         setupAction()
+        observeViewModel()
     }
 
     private fun setupView() {
@@ -56,17 +74,42 @@ class SignupActivity : AppCompatActivity() {
                     binding.tilName.error = null
                     binding.tilEmail.error = null
                     binding.tilPassword.error = null
-                    showToastMessage(name, email)
+                    signupViewModel.register(name, email, password)
                 }
             }
         }
     }
 
-    private fun showToastMessage(name: String, email: String) {
-        Toast.makeText(
-            this,
-            getString(R.string.signup_success_message, name, email),
-            Toast.LENGTH_LONG
-        ).show()
+    private fun observeViewModel() {
+        signupViewModel.isLoading.observe(this) { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+
+        signupViewModel.registerResult.observe(this) { result ->
+            result.onSuccess { response ->
+                Toast.makeText(this, getString(R.string.signup_success), Toast.LENGTH_LONG).show()
+                // Setelah berhasil daftar, langsung login
+                loginAfterSignup(response.registerResponse[0].email, response.registerResponse[0].password)
+            }
+            result.onFailure { throwable ->
+                Toast.makeText(this, throwable.message, Toast.LENGTH_LONG).show()
+            }
+        }
+
+        signupViewModel.loginResult.observe(this) { result ->
+            result.onSuccess {
+                Toast.makeText(this, getString(R.string.login_success), Toast.LENGTH_LONG).show()
+                // Arahkan ke halaman utama atau login
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
+            }
+            result.onFailure { throwable ->
+                Toast.makeText(this, throwable.message, Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun loginAfterSignup(email: String, password: String) {
+        signupViewModel.login(email, password)
     }
 }

@@ -1,5 +1,4 @@
 package com.dicoding.skinalyzecapstone.data.pref
-
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -8,33 +7,34 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-
-
 class UserPreference private constructor(private val dataStore: DataStore<Preferences>) {
 
+    // Save user session
     suspend fun saveSession(user: UserModel) {
         dataStore.edit { preferences ->
-            preferences[ID_USER_KEY] = user.idUser
-            preferences[NAME_KEY] = user.name
-            preferences[EMAIL_KEY] = user.email
-            preferences[TOKEN_KEY] = user.token
-            preferences[IS_LOGIN_KEY] = user.isLogin
+            preferences[KEY_ID_USER] = user.idUser
+            preferences[KEY_NAME] = user.name
+            preferences[KEY_EMAIL] = user.email
+            preferences[KEY_TOKEN] = user.token
+            preferences[KEY_IS_LOGIN] = user.isLogin
         }
     }
 
+    // Get user session
     fun getSession(): Flow<UserModel> {
         return dataStore.data.map { preferences ->
             UserModel(
-                idUser = preferences[ID_USER_KEY] ?: "",
-                name = preferences[NAME_KEY] ?: "",
-                email = preferences[EMAIL_KEY] ?: "",
-                token = preferences[TOKEN_KEY] ?: "",
-                isLogin = preferences[IS_LOGIN_KEY] ?: false
+                idUser = preferences[KEY_ID_USER] ?: "",
+                name = preferences[KEY_NAME] ?: "",
+                email = preferences[KEY_EMAIL] ?: "",
+                token = preferences[KEY_TOKEN] ?: "",
+                isLogin = preferences[KEY_IS_LOGIN] ?: false
             )
         }
     }
 
-    suspend fun logout() {
+    // Clear user session
+    suspend fun clearSession() {
         dataStore.edit { preferences ->
             preferences.clear()
         }
@@ -44,11 +44,11 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
         @Volatile
         private var INSTANCE: UserPreference? = null
 
-        private val ID_USER_KEY = stringPreferencesKey("idUser")
-        private val NAME_KEY = stringPreferencesKey("name")
-        private val EMAIL_KEY = stringPreferencesKey("email")
-        private val TOKEN_KEY = stringPreferencesKey("token")
-        private val IS_LOGIN_KEY = booleanPreferencesKey("isLogin")
+        private val KEY_ID_USER = stringPreferencesKey("id_user")
+        private val KEY_NAME = stringPreferencesKey("name")
+        private val KEY_EMAIL = stringPreferencesKey("email")
+        private val KEY_TOKEN = stringPreferencesKey("token")
+        private val KEY_IS_LOGIN = booleanPreferencesKey("is_login")
 
         fun getInstance(dataStore: DataStore<Preferences>): UserPreference {
             return INSTANCE ?: synchronized(this) {
@@ -59,3 +59,4 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
         }
     }
 }
+
