@@ -54,6 +54,18 @@
     <string name="search_history">Search your skin history</string>
     <string name="history_title">Title</string>
     <string name="history_date">Date</string>
+    <string name="product_name">Nama Produk</string>
+    <string name="back_button_description">Back Button</string>
+    <string name="set_your_time_reminder">Set Your Time Reminder!</string>
+    <string name="reminder_description">
+        Create personalized reminders with your Desired Product Name, description, and time to help you stay on track. Never miss anything important again!
+    </string>
+    <string name="enter_reminder_title">Enter Reminder Title</string>
+    <string name="enter_reminder_description">Enter Reminder Description</string>
+    <string name="enter_time_hint">Enter Time (e.g. 20:00)</string>
+    <string name="remind_me_at">Remind Me At:</string>
+    <string name="delete_button">Delete</string>
+    <string name="save_button">Save</string>
 
 
     <string name="signup">Daftar</string>

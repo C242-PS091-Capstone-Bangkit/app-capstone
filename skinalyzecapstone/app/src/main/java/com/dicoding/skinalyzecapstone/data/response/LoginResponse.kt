@@ -15,7 +15,7 @@ data class LoginResponse(
 )
 
 data class User(
-	@SerializedName("id_user")
+	@SerializedName("id")
 	val id: Int,
 
 	@SerializedName("email")

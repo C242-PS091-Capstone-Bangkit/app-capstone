@@ -1,109 +1,166 @@
 package com.dicoding.skinalyzecapstone.ui.login
 
-import android.content.Context
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.ProgressBar
+import android.view.WindowInsets
+import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.lifecycleScope
 import com.dicoding.skinalyzecapstone.MainActivity
-import com.dicoding.skinalyzecapstone.MyEditText
 import com.dicoding.skinalyzecapstone.R
-import com.dicoding.skinalyzecapstone.data.UserRepository
-import com.dicoding.skinalyzecapstone.data.api.ApiConfig
-import com.dicoding.skinalyzecapstone.data.pref.UserModel
-import com.dicoding.skinalyzecapstone.data.pref.UserPreference
-import com.google.android.material.textfield.TextInputEditText
-import kotlinx.coroutines.launch
-
-private val Context.dataStore by preferencesDataStore(name = "user_preferences")
+import com.dicoding.skinalyzecapstone.databinding.ActivityLoginBinding
+import com.dicoding.skinalyzecapstone.ui.ViewModelFactory
 
 class LoginActivity : AppCompatActivity() {
 
-    private fun logUserDetails(email: String, username: String?) {
-        // Menampilkan informasi pengguna di Logcat
-        android.util.Log.d("UserDetails", "Email: $email, Username: ${username ?: "Tidak tersedia"}")
+    private val viewModel by viewModels<LoginViewModel> {
+        ViewModelFactory.getInstance(this)
     }
-
-    private lateinit var userRepository: UserRepository
+    private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
-
-        // Inisialisasi UserRepository
-        val userPreference = UserPreference.getInstance(dataStore)
-        val apiService = ApiConfig.getApiService()
-        userRepository = UserRepository.getInstance(userPreference, apiService)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setupView()
         setupAction()
+        playAnimation()
+
+        observeViewModel()
     }
 
     private fun setupView() {
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.hide(WindowInsets.Type.statusBars())
+        } else {
+            @Suppress("DEPRECATION")
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
+        }
+        supportActionBar?.hide()
     }
 
     private fun setupAction() {
-        val loginButton: Button = findViewById(R.id.my_button)
-        val emailInput: TextInputEditText = findViewById(R.id.emailEditText)
-        val passwordInput: MyEditText = findViewById(R.id.passwordEditText)
-        val progressBar: ProgressBar = findViewById(R.id.progressBar)
+        binding.myButton.isEnabled = false // Tombol dinonaktifkan secara default
 
-        loginButton.setOnClickListener {
-            val email = emailInput.text.toString().trim()
-            val password = passwordInput.text.toString().trim()
+        val textWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-            if (email.isEmpty()) {
-                emailInput.error = getString(R.string.email_empty)
-            } else if (password.isEmpty()) {
-                passwordInput.error = getString(R.string.password_empty)
-            } else {
-                progressBar.visibility = View.VISIBLE
-                performLogin(email, password, progressBar)
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                setMyButtonEnable()
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        }
+
+        binding.emailEditText.addTextChangedListener(textWatcher)
+        binding.passwordEditText.addTextChangedListener(textWatcher)
+
+        binding.myButton.setOnClickListener {
+            val email = binding.emailEditText.text.toString().trim()
+            val password = binding.passwordEditText.text.toString().trim()
+
+            when {
+                email.isEmpty() -> binding.tilEmail.error = resources.getString(R.string.email_empty)
+                !isValidEmail(email) -> binding.tilEmail.error = resources.getString(R.string.invalid_email)
+                password.isEmpty() -> binding.tilPassword.error = resources.getString(R.string.password_empty)
+                password.length < 8 -> binding.tilPassword.error = resources.getString(R.string.password_minimum_length)
+                else -> {
+                    binding.tilEmail.error = null
+                    binding.tilPassword.error = null
+                    viewModel.login(email, password)
+                }
             }
         }
     }
 
-    private fun performLogin(email: String, password: String, progressBar: ProgressBar) {
-        lifecycleScope.launch {
-            try {
-                val response = userRepository.loginUser(email, password)
+    private fun setMyButtonEnable() {
+        val password = binding.passwordEditText.text.toString().trim()
+        binding.myButton.isEnabled = password.length >= 8
+    }
 
-                if (response.token.isNotEmpty()) {
-                    val user = UserModel(
-                        idUser = response.user.id?.toString() ?: "0",
-                        name = response.user.username,
-                        email = response.user.email,
-                        token = response.token,
-                        isLogin = true
-                    )
-                    userRepository.saveUserSession(user)
+    private fun isValidEmail(email: String): Boolean {
+        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex()
+        return email.matches(emailRegex)
+    }
 
-                    // Panggilan log user
-                    logUserDetails(response.user.email, response.user.username)
+    private fun observeViewModel() {
+        viewModel.isLoading.observe(this) { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
 
-                    progressBar.visibility = View.GONE
-                    Toast.makeText(this@LoginActivity, getString(R.string.login_success), Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+        viewModel.loginResult.observe(this) { result ->
+            Log.d("LoginActivity", "Login result observed: $result")
+            result.onSuccess { loginResponse ->
+                Log.d("LoginActivity", "Login successful, navigating to MainActivity")
+                val user = com.dicoding.skinalyzecapstone.data.pref.UserModel(
+                    idUser = loginResponse.user.id?.toString() ?: "",
+                    name = loginResponse.user.username ?: "",
+                    email = binding.emailEditText.text.toString(),
+                    token = loginResponse.token,
+                    isLogin = true
+                )
+
+                viewModel.saveUser(user)
+
+                runOnUiThread {
+                    Toast.makeText(this, R.string.login_success, Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, MainActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    })
                     finish()
                 }
-                else {
-                    showError(progressBar, getString(R.string.login_failed))
-                }
-            } catch (e: Exception) {
-                showError(progressBar, getString(R.string.login_error))
+            }
+            result.onFailure { throwable ->
+                Log.e("LoginActivity", "Login failed", throwable)
+                AlertDialog.Builder(this)
+                    .setTitle(R.string.login_failed)
+                    .setMessage(throwable.localizedMessage)
+                    .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+                    .show()
             }
         }
     }
 
-    private fun showError(progressBar: ProgressBar, message: String) {
-        progressBar.visibility = View.GONE
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+
+    private fun playAnimation() {
+        ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
+            duration = 6000
+            repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.REVERSE
+        }.start()
+
+        val title = ObjectAnimator.ofFloat(binding.titleTextView, View.ALPHA, 1f).setDuration(100)
+        val message = ObjectAnimator.ofFloat(binding.messageTextView, View.ALPHA, 1f).setDuration(100)
+        val emailTextView = ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(100)
+        val emailEditTextLayout = ObjectAnimator.ofFloat(binding.tilEmail, View.ALPHA, 1f).setDuration(100)
+        val passwordTextView = ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(100)
+        val passwordEditTextLayout = ObjectAnimator.ofFloat(binding.tilPassword, View.ALPHA, 1f).setDuration(100)
+        val loginButton = ObjectAnimator.ofFloat(binding.myButton, View.ALPHA, 1f).setDuration(100)
+
+        AnimatorSet().apply {
+            playSequentially(
+                title,
+                message,
+                emailTextView,
+                emailEditTextLayout,
+                passwordTextView,
+                passwordEditTextLayout,
+                loginButton
+            )
+            startDelay = 100
+        }.start()
     }
 }

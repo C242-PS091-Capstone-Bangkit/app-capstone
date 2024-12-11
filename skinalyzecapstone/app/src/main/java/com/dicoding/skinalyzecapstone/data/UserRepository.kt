@@ -57,6 +57,14 @@ class UserRepository(
     ): CreateReminderResponse {
         return apiService.createReminder(title, description, time)
     }
+    suspend fun getReminders(): List<ReminderResponse> {
+        return apiService.getReminder()
+    }
+
+    suspend fun getRemindersByUserId(idUser: Int): List<ReminderResponse> {
+        return apiService.getRemindersByUserId(idUser)
+    }
+
 
     // History APIs
     suspend fun getHistoryById(id: Int): GetHistoryResponse {

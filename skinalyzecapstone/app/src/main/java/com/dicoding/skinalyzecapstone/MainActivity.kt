@@ -104,10 +104,20 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             userPreference.getSession().collect { user ->
                 if (!user.isLogin) {
+                    // Jika pengguna belum login, arahkan ke LoginActivity
                     startActivity(Intent(this@MainActivity, LoginActivity::class.java))
                     finish()
+                } else {
+                    // Menampilkan log informasi pengguna yang login
+                    Log.d("UserDetails", "User logged in: ")
+                    Log.d("UserDetails", "ID: ${user.idUser}")
+                    Log.d("UserDetails", "Username: ${user.name}")
+                    Log.d("UserDetails", "Email: ${user.email}")
+                    Log.d("UserDetails", "Token: ${user.token}")
+                    Log.d("UserDetails", "Is Logged In: ${user.isLogin}")
                 }
             }
         }
     }
+
 }
