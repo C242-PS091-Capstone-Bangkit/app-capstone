@@ -24,6 +24,11 @@ private val Context.dataStore by preferencesDataStore(name = "user_preferences")
 
 class LoginActivity : AppCompatActivity() {
 
+    private fun logUserDetails(email: String, username: String?) {
+        // Menampilkan informasi pengguna di Logcat
+        android.util.Log.d("UserDetails", "Email: $email, Username: ${username ?: "Tidak tersedia"}")
+    }
+
     private lateinit var userRepository: UserRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,7 +77,7 @@ class LoginActivity : AppCompatActivity() {
 
                 if (response.token.isNotEmpty()) {
                     val user = UserModel(
-                        idUser = response.user.id.toString(),
+                        idUser = response.user.id?.toString() ?: "0",
                         name = response.user.username,
                         email = response.user.email,
                         token = response.token,
@@ -80,11 +85,15 @@ class LoginActivity : AppCompatActivity() {
                     )
                     userRepository.saveUserSession(user)
 
+                    // Panggilan log user
+                    logUserDetails(response.user.email, response.user.username)
+
                     progressBar.visibility = View.GONE
                     Toast.makeText(this@LoginActivity, getString(R.string.login_success), Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                     finish()
-                } else {
+                }
+                else {
                     showError(progressBar, getString(R.string.login_failed))
                 }
             } catch (e: Exception) {
