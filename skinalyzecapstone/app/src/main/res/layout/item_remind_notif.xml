@@ -3,7 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/header_background"
+    android:padding="10dp"
+    android:layout_marginBottom="20dp"> <!-- Tambahkan margin antar item -->
+
 
     <!-- Title: judul_reminder -->
     <TextView
@@ -58,15 +62,5 @@
         app:layout_constraintTop_toTopOf="@id/tv_reminder_time"
         app:layout_constraintBottom_toBottomOf="@id/tv_reminder_time"
         app:layout_constraintEnd_toEndOf="parent"/>
-
-    <!-- Divider line -->
-    <View
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_reminder_time"
-        android:layout_marginTop="8dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
