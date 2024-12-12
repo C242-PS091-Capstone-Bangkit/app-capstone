@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
@@ -15,14 +14,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.dicoding.skinalyzecapstone.R
 import com.dicoding.skinalyzecapstone.databinding.FragmentHomeBinding
-import com.dicoding.skinalyzecapstone.ui.adapter.ReminderAdapter
+import com.dicoding.skinalyzecapstone.ui.adapter.ImageAdapter
+import com.dicoding.skinalyzecapstone.ui.adapter.ImageSliderAdapter
+import com.dicoding.skinalyzecapstone.ui.animate.SlowPageTransformer
 import com.dicoding.skinalyzecapstone.data.UserRepository
 import com.dicoding.skinalyzecapstone.data.api.ApiConfig
 import com.dicoding.skinalyzecapstone.data.pref.UserPreference
-import com.dicoding.skinalyzecapstone.data.response.ReminderResponse
-import com.dicoding.skinalyzecapstone.ui.adapter.ImageSliderAdapter
-import com.dicoding.skinalyzecapstone.ui.animate.SlowPageTransformer
-import com.dicoding.skinalyzecapstone.ui.model.Reminder
 import com.dicoding.skinalyzecapstone.ui.setreminder.SetReminderActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -36,8 +33,24 @@ class HomeFragment : Fragment() {
     private lateinit var userRepository: UserRepository
     private lateinit var imageSliderAdapter: ImageSliderAdapter
     private val imageList = listOf(
-        R.drawable.slider1, // Replace with your drawable resources
+        R.drawable.slider1,
         R.drawable.slider2,
+    )
+
+    // Daftar gambar skincare
+    private val skincareImages = listOf(
+        R.drawable.skincare1,
+        R.drawable.skincare2,
+        R.drawable.skincare3,
+        R.drawable.skincare4
+    )
+
+    // Daftar judul skincare
+    private val skincareTitles = listOf(
+        "Dermalogica AGE Bright Clearing Serum 30ml",
+        "PIXI Overnight Glow Serum",
+        "Aurelia Skincare Firm & Replenish Body Serum 250ml",
+        "The Ordinary Vitamin C Suspension Cream 30% in Silicone 30ml"
     )
 
     override fun onCreateView(
@@ -51,7 +64,6 @@ class HomeFragment : Fragment() {
             ApiConfig.getApiServiceGeneral()
         )
 
-
         // Configure the Image Slider
         setupImageSlider()
 
@@ -59,7 +71,9 @@ class HomeFragment : Fragment() {
         val toolbar = binding.toolbarHome
         (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
         (activity as? AppCompatActivity)?.supportActionBar?.setDisplayShowTitleEnabled(false)
-         // Set the title of the Toolbar
+
+        // Configure RecyclerView for skincare images
+        setupRecyclerView()
 
         // Set action for the "Add Reminder" button
         binding.buttonSetReminder.setOnClickListener {
@@ -89,7 +103,14 @@ class HomeFragment : Fragment() {
         }
     }
 
-
+    private fun setupRecyclerView() {
+        // Membuat adapter untuk RecyclerView
+        val skincareAdapter = ImageAdapter(skincareImages, skincareTitles)
+        binding.imageRecyclerView.apply {
+            layoutManager = GridLayoutManager(context, 2) // Tampilkan dalam grid 2 kolom
+            adapter = skincareAdapter
+        }
+    }
 
     private fun loadUserSession() {
         lifecycleScope.launch {
