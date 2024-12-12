@@ -30,12 +30,12 @@ class MainActivity : AppCompatActivity() {
         // Inisialisasi DataStore Preference
         userPreference = UserPreference.getInstance(dataStore)
 
-        // Cek status login sebelum menampilkan konten utama
-        checkLoginStatus()
-
         // Inflate layout
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Cek status login sebelum menampilkan konten utama
+        checkLoginStatus()
 
         // Setup Bottom Navigation dan NavController
         setupNavigation()
@@ -98,14 +98,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-
     private fun clearMenuSelection(navView: BottomNavigationView) {
         for (i in 0 until navView.menu.size()) {
             navView.menu.getItem(i).isChecked = false // Set semua menu menjadi tidak terpilih
         }
     }
-
 
     private fun checkLoginStatus() {
         lifecycleScope.launch {
@@ -126,5 +123,4 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
 }

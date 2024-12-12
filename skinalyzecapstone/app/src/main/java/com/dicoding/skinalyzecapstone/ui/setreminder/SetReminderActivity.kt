@@ -1,6 +1,7 @@
 package com.dicoding.skinalyzecapstone.ui.setreminder
 
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
@@ -19,6 +20,7 @@ import java.util.*
 
 // DataStore Ekstensi
 import androidx.datastore.preferences.preferencesDataStore
+import com.dicoding.skinalyzecapstone.MainActivity
 
 private val android.content.Context.dataStore by preferencesDataStore("user_preferences")
 
@@ -132,6 +134,10 @@ class SetReminderActivity : AppCompatActivity() {
     private fun handleCreateReminderResponse(response: CreateReminderResponse) {
         Log.d("SetReminderActivity", "Respons: ${response.message}")
         Toast.makeText(this, response.message, Toast.LENGTH_LONG).show()
-        finish() // Tutup halaman setelah menyimpan data
+
+        // Pindah ke MainActivity (yang menampilkan NotificationFragment)
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent) // Mulai MainActivity
+        finish() // Tutup SetReminderActivity
     }
 }
