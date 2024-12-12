@@ -110,7 +110,7 @@ class ScanFragment : Fragment() {
 
     private fun clearImage() {
         currentImageUri = null
-        binding.previewImageView.setImageDrawable(null)
+        binding.previewImageView.setImageResource(R.drawable.no_image) // Set placeholder image
     }
 
     private fun startGallery() {

@@ -71,6 +71,7 @@
     <string name="scan_result_label">Jenis kulit anda : </string>
     <string name="skin_condition_label">Anda memiliki kulit berkondisi  </string>
     <string name="clear_image">Clear Image</string>
+    <string name="scan_your_skin_now">Scan your skin Now!</string>
 
 
     <string name="signup">Daftar</string>
