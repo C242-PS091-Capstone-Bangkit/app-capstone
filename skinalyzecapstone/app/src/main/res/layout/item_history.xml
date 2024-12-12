@@ -55,13 +55,18 @@
                 android:src="@drawable/skin_type" />
 
             <TextView
-                android:id="@+id/tv_skin_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Skin Type"
-                android:textColor="@color/gray"
-                />
+                android:text="Skin Type : "
+                android:textColor="@color/gray" />
+
+            <TextView
+                android:id="@+id/tv_skin_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Normal"
+                android:textColor="@color/gray" />
         </LinearLayout>
 
         <LinearLayout
@@ -76,13 +81,18 @@
                 android:src="@drawable/ic_skin_condition" />
 
             <TextView
-                android:id="@+id/tv_skin_condition"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Skin Condition"
-                android:textColor="@color/gray"
-                />
+                android:text="Skin Condition : "
+                android:textColor="@color/gray" />
+
+            <TextView
+                android:id="@+id/tv_skin_condition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Acne"
+                android:textColor="@color/gray" />
         </LinearLayout>
 
     </LinearLayout>
