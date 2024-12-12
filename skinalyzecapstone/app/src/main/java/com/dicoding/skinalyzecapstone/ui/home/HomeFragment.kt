@@ -40,6 +40,10 @@ class HomeFragment : Fragment() {
             ApiConfig.getApiServiceGeneral()
         )
 
+        // Set action for the "Add Reminder" button
+        binding.buttonSetReminder.setOnClickListener {
+            startActivity(Intent(context, SetReminderActivity::class.java))
+        }
 
         loadUserSession()
         return binding.root
@@ -83,11 +87,7 @@ class HomeFragment : Fragment() {
         binding.reminderList.visibility = View.GONE
         binding.textNoReminder.visibility = View.VISIBLE
         binding.buttonSetReminder.visibility = View.VISIBLE
-        binding.buttonSetReminder.setOnClickListener {
-            startActivity(Intent(context, SetReminderActivity::class.java))
-        }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

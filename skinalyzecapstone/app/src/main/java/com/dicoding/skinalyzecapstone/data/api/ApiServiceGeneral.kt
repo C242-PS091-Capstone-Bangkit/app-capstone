@@ -61,16 +61,16 @@ interface ApiServiceGeneral {
     ): LoginResponse
 
     // Reminder APIs
-    @GET("reminder")
+    @GET("reminders")
     suspend fun getReminder(): List<ReminderResponse>
 
-    @GET("reminder/{id}")
+    @GET("reminders/{id}")
     suspend fun getReminderById(
         @Path("id") id: Int
     ): ReminderResponse
 
     @FormUrlEncoded
-    @POST("reminder")
+    @POST("reminders")
     suspend fun createReminder(
         @Field("judul_reminder") title: String,
         @Field("deskripsi") description: String,
@@ -78,7 +78,7 @@ interface ApiServiceGeneral {
     ): CreateReminderResponse
 
     @FormUrlEncoded
-    @PUT("reminder/{id}")
+    @PUT("reminders/{id}")
     suspend fun editReminder(
         @Path("id") id: Int,
         @Field("judul_reminder") title: String,
@@ -86,7 +86,7 @@ interface ApiServiceGeneral {
         @Field("jam_reminder") time: String
     ): UpdateReminderResponse
 
-    @DELETE("reminder/{id}")
+    @DELETE("reminders/{id}")
     suspend fun deleteReminder(
         @Path("id") id: Int
     ): DeleteReminderResponse

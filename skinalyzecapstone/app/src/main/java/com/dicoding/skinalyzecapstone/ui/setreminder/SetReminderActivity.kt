@@ -5,6 +5,12 @@ import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.dicoding.skinalyzecapstone.R
+import com.dicoding.skinalyzecapstone.data.api.ApiConfig
+import com.dicoding.skinalyzecapstone.data.response.CreateReminderResponse
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 
 class SetReminderActivity : AppCompatActivity() {
@@ -35,15 +41,14 @@ class SetReminderActivity : AppCompatActivity() {
 
         // Handle Save Button Click
         saveButton.setOnClickListener {
-            val title = reminderTitle.text.toString()
-            val description = reminderDescription.text.toString()
-            val time = remindTimeInput.text.toString()
+            val title = reminderTitle.text.toString().trim()
+            val description = reminderDescription.text.toString().trim()
+            val time = remindTimeInput.text.toString().trim()
 
             if (title.isEmpty() || description.isEmpty() || time.isEmpty()) {
                 Toast.makeText(this, "Please fill all the fields!", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Reminder Saved!\nTitle: $title\nTime: $time", Toast.LENGTH_LONG).show()
-                // Save logic here
+                createReminder(title, description, time)
             }
         }
 
@@ -75,5 +80,26 @@ class SetReminderActivity : AppCompatActivity() {
             minute,
             true // Use 24-hour format
         ).show()
+    }
+
+    // Send Data to API
+    private fun createReminder(title: String, description: String, time: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = ApiConfig.getApiServiceGeneral().createReminder(title, description, time)
+                withContext(Dispatchers.Main) {
+                    handleCreateReminderResponse(response)
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@SetReminderActivity, "Failed to save reminder", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun handleCreateReminderResponse(response: CreateReminderResponse) {
+        Toast.makeText(this, response.message, Toast.LENGTH_LONG).show()
+        finish() // Close the activity after saving
     }
 }
