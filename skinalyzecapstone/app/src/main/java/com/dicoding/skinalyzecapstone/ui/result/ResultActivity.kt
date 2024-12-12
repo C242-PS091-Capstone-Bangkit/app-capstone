@@ -44,7 +44,7 @@ class ResultActivity : AppCompatActivity() {
                 }
             } ?: emptyList()
 
-            val adapter = RecommendationAdapter(updatedRecommendations)
+            val adapter = RecommendationAdapter(updatedRecommendations, it.skinCondition) // Pass the string here as well
             binding.recommendationList.adapter = adapter
         }
     }

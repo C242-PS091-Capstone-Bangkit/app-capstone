@@ -49,12 +49,6 @@
             android:layout_marginTop="8dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/skin_condition_label"
-                android:textAppearance="?attr/textAppearanceBody1" />
-
-            <TextView
                 android:id="@+id/confidenceText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
