@@ -37,8 +37,7 @@ class HomeFragment : Fragment() {
     private lateinit var imageSliderAdapter: ImageSliderAdapter
     private val imageList = listOf(
         R.drawable.slider1, // Replace with your drawable resources
-        R.drawable.slider1,
-        R.drawable.slider1
+        R.drawable.slider2,
     )
 
     override fun onCreateView(
