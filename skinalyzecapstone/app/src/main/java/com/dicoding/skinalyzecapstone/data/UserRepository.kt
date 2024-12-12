@@ -51,12 +51,14 @@ class UserRepository(
 
     // Reminder APIs
     suspend fun createReminder(
+        idUser: Int, // Tambahkan parameter id_user
         title: String,
         description: String,
         time: String
     ): CreateReminderResponse {
-        return apiServiceGeneral.createReminder(title, description, time)
+        return apiServiceGeneral.createReminder(idUser, title, description, time)
     }
+
     suspend fun getReminders(): List<ReminderResponse> {
         return apiServiceGeneral.getReminder()
     }

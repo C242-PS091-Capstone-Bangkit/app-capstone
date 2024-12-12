@@ -72,6 +72,7 @@ interface ApiServiceGeneral {
     @FormUrlEncoded
     @POST("reminders")
     suspend fun createReminder(
+        @Field("id_user") idUser: Int, // Tambahkan parameter id_user
         @Field("judul_reminder") title: String,
         @Field("deskripsi") description: String,
         @Field("jam_reminder") time: String
