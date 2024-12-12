@@ -83,12 +83,6 @@
                 android:text="Your Daily Reminder"
                 android:textAppearance="?attr/textAppearanceSubtitle1" />
 
-            <!-- RecyclerView for Reminder List -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/reminder_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:listitem="@layout/item_reminder" />
 
             <!-- Placeholder Text for Empty State -->
             <TextView

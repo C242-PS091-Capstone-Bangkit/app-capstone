@@ -14,7 +14,6 @@ class ReminderAdapter(private val reminderList: List<Reminder>) :
         fun bind(reminder: Reminder) {
             binding.reminderImage.setImageResource(reminder.imageResId)
             binding.reminderText.text = reminder.text
-            binding.reminderSwitch.isChecked = reminder.isEnabled
         }
     }
 

@@ -95,40 +95,8 @@ class HomeFragment : Fragment() {
         lifecycleScope.launch {
             userRepository.getUserSession().collect { user ->
                 binding.textHiUser.text = "Hi, ${user.name}!"
-                loadReminders(user.idUser.toInt())
             }
         }
-    }
-
-    private fun loadReminders(userId: Int) {
-        lifecycleScope.launch {
-            try {
-                val reminders = userRepository.getRemindersByUserId(userId)
-                if (reminders.isEmpty()) {
-                    showReminderNotFound()
-                } else {
-                    setupRecyclerView(reminders)
-                }
-            } catch (e: Exception) {
-                Toast.makeText(context, "Failed to load reminders", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    private fun setupRecyclerView(reminders: List<ReminderResponse>) {
-        val reminderList = reminders.mapNotNull {
-            it.judulReminder?.let { title -> Reminder(title, R.drawable.skincare, true) }
-        }
-
-        val adapter = ReminderAdapter(reminderList)
-        binding.reminderList.layoutManager = GridLayoutManager(context, 2)
-        binding.reminderList.adapter = adapter
-    }
-
-    private fun showReminderNotFound() {
-        binding.reminderList.visibility = View.GONE
-        binding.textNoReminder.visibility = View.VISIBLE
-        binding.buttonSetReminder.visibility = View.VISIBLE
     }
 
     override fun onDestroyView() {
