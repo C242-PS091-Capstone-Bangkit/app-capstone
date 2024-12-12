@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:background="@drawable/header_background">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,7 +40,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray"
+            android:background="@android:color/black"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"/>
 
@@ -59,14 +60,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="Skin Type : "
-                android:textColor="@color/gray" />
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/tv_skin_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Normal"
-                android:textColor="@color/gray" />
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <LinearLayout
@@ -85,14 +86,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="Skin Condition : "
-                android:textColor="@color/gray" />
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/tv_skin_condition"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Acne"
-                android:textColor="@color/gray" />
+                android:textColor="@color/black" />
         </LinearLayout>
 
     </LinearLayout>
