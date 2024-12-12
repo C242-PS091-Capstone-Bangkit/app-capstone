@@ -42,7 +42,7 @@ class ScanFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri: Uri? ->
             if (uri != null) {
                 currentImageUri = uri
-                showImage()
+                showImage(uri)
             } else {
                 Log.d("Photo Picker", "No media selected")
             }
@@ -51,11 +51,17 @@ class ScanFragment : Fragment() {
     private val requestCameraLauncher =
         registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
             if (isSuccess) {
-                showImage()
+                showImage(currentImageUri!!) // Use currentImageUri directly
             } else {
                 Log.d("Camera", "Image capture failed")
             }
         }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable("currentImageUri", currentImageUri) // Save the URI
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -65,6 +71,10 @@ class ScanFragment : Fragment() {
         // Cek dan minta izin
         if (!allPermissionsGranted()) {
             requestPermissions(arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_CODE)
+        }
+        if (savedInstanceState != null) {
+            currentImageUri = savedInstanceState.getParcelable("currentImageUri") // Restore the URI
+            currentImageUri?.let { showImage(it) }
         }
 
         setupListeners()
@@ -80,6 +90,19 @@ class ScanFragment : Fragment() {
                 postImage(it)
             } ?: showToast(getString(R.string.empty_image_warning))
         }
+
+        binding.clearButton.setOnClickListener {  // Add this line
+            clearImage()
+        }
+        binding.cameraButton.setOnClickListener {
+            currentImageUri = getImageUri(requireContext())
+            startCamera()
+        }
+    }
+
+    private fun clearImage() {
+        currentImageUri = null
+        binding.previewImageView.setImageDrawable(null)
     }
 
     private fun startGallery() {
@@ -88,14 +111,11 @@ class ScanFragment : Fragment() {
 
 
     private fun startCamera() {
-        currentImageUri = getImageUri(requireContext())
         requestCameraLauncher.launch(currentImageUri)
     }
 
-    private fun showImage() {
-        currentImageUri?.let {
-            binding.previewImageView.setImageURI(it)
-        }
+    private fun showImage(uri: Uri) { // Modified to accept URI as a parameter
+        binding.previewImageView.setImageURI(uri)
     }
 
 
@@ -133,9 +153,11 @@ class ScanFragment : Fragment() {
     private fun navigateToResultActivity(response: PredictResponse) {
         val intent = Intent(requireContext(), ResultActivity::class.java).apply {
             putExtra(ResultActivity.EXTRA_RESULT, response)
+            putExtra(ResultActivity.EXTRA_IMAGE_URI, currentImageUri) // Add this line
         }
         startActivity(intent)
     }
+
 
     private fun getFileFromUri(uri: Uri): File? {
         val tempFile = createCustomTempFile(requireContext())

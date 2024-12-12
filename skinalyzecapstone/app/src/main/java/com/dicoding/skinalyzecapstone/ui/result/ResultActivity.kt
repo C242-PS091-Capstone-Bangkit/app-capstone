@@ -1,38 +1,51 @@
 package com.dicoding.skinalyzecapstone.ui.result
 
+import android.net.Uri
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.dicoding.skinalyzecapstone.R
 import com.dicoding.skinalyzecapstone.data.response.PredictResponse
+import com.dicoding.skinalyzecapstone.databinding.ActivityResultBinding
 import com.dicoding.skinalyzecapstone.ui.adapter.RecommendationAdapter
 
 class ResultActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityResultBinding
+
     companion object {
         const val EXTRA_RESULT = "extra_result"
+        const val EXTRA_IMAGE_URI = "extra_image_uri"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_result)
+        binding = ActivityResultBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val result = intent.getParcelableExtra<PredictResponse>(EXTRA_RESULT)
+        val imageUri = intent.getParcelableExtra<Uri>(EXTRA_IMAGE_URI)
 
         result?.let {
-            // Display skin result
-            findViewById<TextView>(R.id.result_text).text = it.skinType
-            findViewById<TextView>(R.id.confidenceText).text = it.skinCondition
+            binding.resultImage.setImageURI(imageUri)
+            binding.resultText.text = it.skinType
 
-            // Display recommendations using RecyclerView
-            val recommendationList = findViewById<RecyclerView>(R.id.recommendation_list)
-            recommendationList.layoutManager = LinearLayoutManager(this)
-            val adapter = RecommendationAdapter(it.recommendation ?: emptyList()) // Use emptyList if null
-            recommendationList.adapter = adapter
+            val saranKandungan = it.recommendation?.firstOrNull()?.saranKandungan
+            val fullConditionText = if (saranKandungan != null) {
+                "Anda memiliki kulit berkondisi ${it.skinCondition}\nSaran Kandungan: $saranKandungan"
+            } else {
+                "Anda memiliki kulit berkondisi ${it.skinCondition}"
+            }
+            binding.confidenceText.text = fullConditionText
+
+            binding.recommendationList.layoutManager = LinearLayoutManager(this)
+            val updatedRecommendations = it.recommendation?.toMutableList()?.also { list ->
+                if (list.isNotEmpty()) {
+                    list.removeAt(0)
+                }
+            } ?: emptyList()
+
+            val adapter = RecommendationAdapter(updatedRecommendations)
+            binding.recommendationList.adapter = adapter
         }
     }
 }

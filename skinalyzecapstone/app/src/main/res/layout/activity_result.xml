@@ -45,7 +45,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_marginTop="8dp">
 
             <TextView
@@ -58,9 +58,9 @@
                 android:id="@+id/confidenceText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="5dp"
                 android:textAppearance="?attr/textAppearanceBody1"
                 android:text="@string/contains" />
+
         </LinearLayout>
 
 

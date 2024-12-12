@@ -70,6 +70,7 @@
     <string name="placeholder_product_details">Product details go here</string>
     <string name="scan_result_label">Jenis kulit anda : </string>
     <string name="skin_condition_label">Anda memiliki kulit berkondisi  </string>
+    <string name="clear_image">Clear Image</string>
 
 
     <string name="signup">Daftar</string>
