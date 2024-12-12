@@ -37,7 +37,7 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         userRepository = UserRepository.getInstance(
             UserPreference.getInstance(requireContext().dataStore),
-            ApiConfig.getApiService()
+            ApiConfig.getApiServiceGeneral()
         )
 
 

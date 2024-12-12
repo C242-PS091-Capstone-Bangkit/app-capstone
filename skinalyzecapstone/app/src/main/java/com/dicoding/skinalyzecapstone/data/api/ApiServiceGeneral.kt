@@ -20,7 +20,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 
-interface ApiService {
+interface ApiServiceGeneral {
 
     // User APIs
     @GET("users")

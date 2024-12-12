@@ -6,17 +6,29 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiConfig {
-    fun getApiService(): ApiService {
-        val loggingInterceptor =
-            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+
+    private const val BASE_URL_1 = "http://34.101.62.223:5000/" // Base URL untuk keperluan umum
+    private const val BASE_URL_2 = "http://34.101.62.223:6000/" // Base URL untuk scan model
+
+    private fun createRetrofit(baseUrl: String): Retrofit {
+        val loggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         val client = OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .build()
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://34.101.62.223:5000")
+        return Retrofit.Builder()
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
-        return retrofit.create(ApiService::class.java)
+    }
+
+    // Instance Retrofit untuk API umum
+    fun getApiServiceGeneral(): ApiServiceGeneral {
+        return createRetrofit(BASE_URL_1).create(ApiServiceGeneral::class.java)
+    }
+
+    // Instance Retrofit untuk API scan model
+    fun getApiServiceScan(): ApiServiceScan {
+        return createRetrofit(BASE_URL_2).create(ApiServiceScan::class.java)
     }
 }

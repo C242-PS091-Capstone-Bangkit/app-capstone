@@ -66,6 +66,10 @@
     <string name="remind_me_at">Remind Me At:</string>
     <string name="delete_button">Delete</string>
     <string name="save_button">Save</string>
+    <string name="placeholder_product_name">Product Name</string>
+    <string name="placeholder_product_details">Product details go here</string>
+    <string name="scan_result_label">Jenis kulit anda : </string>
+    <string name="skin_condition_label">Anda memiliki kulit berkondisi  </string>
 
 
     <string name="signup">Daftar</string>

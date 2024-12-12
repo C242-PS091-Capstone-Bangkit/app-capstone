@@ -26,7 +26,7 @@ class SignupActivity : AppCompatActivity() {
         ViewModelFactory(
             UserRepository(
                 UserPreference.getInstance(dataStore), // Pastikan dataStore sudah diinisialisasi di Application
-                ApiConfig.getApiService()
+                ApiConfig.getApiServiceGeneral()
             )
         )
     }

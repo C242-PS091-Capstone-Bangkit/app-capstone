@@ -1,42 +1,38 @@
 package com.dicoding.skinalyzecapstone.ui.result
 
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.dicoding.skinalyzecapstone.databinding.ActivityResultBinding
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.dicoding.skinalyzecapstone.R
+import com.dicoding.skinalyzecapstone.data.response.PredictResponse
+import com.dicoding.skinalyzecapstone.ui.adapter.RecommendationAdapter
 
 class ResultActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityResultBinding
+    companion object {
+        const val EXTRA_RESULT = "extra_result"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityResultBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_result)
 
-        // Retrieve the image URI from the intent
-        val imageUri = intent.getStringExtra(EXTRA_IMAGE_URI)?.let { Uri.parse(it) }
+        val result = intent.getParcelableExtra<PredictResponse>(EXTRA_RESULT)
 
-        // Display the image
-        imageUri?.let {
-            Log.d("ResultActivity", "Displaying image URI: $it")
-            binding.resultImage.setImageURI(it) // Ensure resultImage is defined in your layout
-        } ?: run {
-            Log.d("ResultActivity", "No image URI found")
+        result?.let {
+            // Display skin result
+            findViewById<TextView>(R.id.result_text).text = it.skinType
+            findViewById<TextView>(R.id.confidenceText).text = it.skinCondition
+
+            // Display recommendations using RecyclerView
+            val recommendationList = findViewById<RecyclerView>(R.id.recommendation_list)
+            recommendationList.layoutManager = LinearLayoutManager(this)
+            val adapter = RecommendationAdapter(it.recommendation ?: emptyList()) // Use emptyList if null
+            recommendationList.adapter = adapter
         }
-
-        // Optional: Display confidence score or analysis result if passed
-        val resultText = intent.getStringExtra(EXTRA_RESULT_TEXT) ?: "No result available"
-        binding.resultText.text = resultText
-
-        val confidenceText = intent.getStringExtra(EXTRA_CONFIDENCE_TEXT) ?: "Confidence: N/A"
-        binding.confidenceText.text = confidenceText
-    }
-
-    companion object {
-        const val EXTRA_IMAGE_URI = "extra_image_uri"
-        const val EXTRA_RESULT_TEXT = "extra_result_text"
-        const val EXTRA_CONFIDENCE_TEXT = "extra_confidence_text"
     }
 }

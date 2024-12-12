@@ -13,7 +13,6 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
-        <!-- Result Image -->
         <ImageView
             android:id="@+id/result_image"
             android:layout_width="match_parent"
@@ -22,32 +21,55 @@
             app:srcCompat="@drawable/ic_place_holder"
             android:contentDescription="@string/result_image_desc" />
 
-        <!-- Result Text -->
-        <TextView
-            android:id="@+id/result_text"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:textAppearance="?attr/textAppearanceHeadline6"
-            android:text="@string/result" />
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
 
-        <!-- Confidence Text -->
-        <TextView
-            android:id="@+id/confidenceText"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/scan_result_label"
+                android:textAppearance="?attr/textAppearanceHeadline6" />
+
+            <TextView
+                android:id="@+id/result_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="5dp"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:text="@string/result" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textAppearance="?attr/textAppearanceBody1"
-            android:text="@string/contains" />
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
 
-        <!-- Divider -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/skin_condition_label"
+                android:textAppearance="?attr/textAppearanceBody1" />
+
+            <TextView
+                android:id="@+id/confidenceText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="5dp"
+                android:textAppearance="?attr/textAppearanceBody1"
+                android:text="@string/contains" />
+        </LinearLayout>
+
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginVertical="16dp"
             android:background="@android:color/darker_gray" />
 
-        <!-- Recommendation Header -->
         <TextView
             android:id="@+id/recommendation_header"
             android:layout_width="match_parent"
@@ -56,92 +78,11 @@
             android:textAppearance="?attr/textAppearanceHeadline6"
             android:layout_marginBottom="8dp" />
 
-        <!-- Recommendation Grid -->
-        <GridLayout
-            android:id="@+id/recommendation_grid"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recommendation_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="2"
-            android:orientation="horizontal"
-            android:layout_gravity="center">
-
-            <!-- Product 1 -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_columnWeight="1"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="8dp">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="120dp"
-                        android:scaleType="fitCenter"
-                        app:srcCompat="@drawable/ic_place_holder" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Product Name 1"
-                        android:textAppearance="?attr/textAppearanceHeadline6" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Contains: Vitamin C, Aloe Vera"
-                        android:textAppearance="?attr/textAppearanceBody1" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- Product 2 -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_columnWeight="1"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="8dp">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="120dp"
-                        android:scaleType="fitCenter"
-                        app:srcCompat="@drawable/ic_place_holder" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Product Name 2"
-                        android:textAppearance="?attr/textAppearanceHeadline6" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Contains: Salicylic Acid, Tea Tree Oil"
-                        android:textAppearance="?attr/textAppearanceBody1" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- Repeat similar structure for other products -->
-
-        </GridLayout>
+            tools:listitem="@layout/item_recommendation" />
 
     </LinearLayout>
 </ScrollView>
