@@ -67,7 +67,7 @@ class UserRepository(
 
 
     // History APIs
-    suspend fun getHistoryById(id: Int): GetHistoryResponse {
+    suspend fun getHistoryById(id: Int): List<GetHistoryResponse> { // Ubah tipe data menjadi List
         return apiServiceGeneral.getHistoryById(id)
     }
 

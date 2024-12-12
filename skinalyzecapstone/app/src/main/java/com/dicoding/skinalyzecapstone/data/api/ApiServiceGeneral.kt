@@ -95,7 +95,7 @@ interface ApiServiceGeneral {
     @GET("history/{id}")
     suspend fun getHistoryById(
         @Path("id") id: Int
-    ): GetHistoryResponse
+    ): List<GetHistoryResponse>
 
     @DELETE("history/{id}")
     suspend fun deleteHistory(

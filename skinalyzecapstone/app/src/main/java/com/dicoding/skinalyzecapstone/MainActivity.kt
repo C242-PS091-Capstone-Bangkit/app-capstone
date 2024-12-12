@@ -90,20 +90,22 @@ class MainActivity : AppCompatActivity() {
             val options = NavOptions.Builder()
                 .setEnterAnim(R.anim.fade_in)
                 .setExitAnim(R.anim.fade_out)
-                .setPopUpTo(R.id.navigation_home, true)
                 .build()
             navController.navigate(R.id.navigation_scan, null, options)
             clearMenuSelection(navView)
-            lastSelectedItemId = -1
+
+            navView.selectedItemId = 0
         }
     }
+
 
 
     private fun clearMenuSelection(navView: BottomNavigationView) {
         for (i in 0 until navView.menu.size()) {
-            navView.menu.getItem(i).isChecked = false
+            navView.menu.getItem(i).isChecked = false // Set semua menu menjadi tidak terpilih
         }
     }
+
 
     private fun checkLoginStatus() {
         lifecycleScope.launch {

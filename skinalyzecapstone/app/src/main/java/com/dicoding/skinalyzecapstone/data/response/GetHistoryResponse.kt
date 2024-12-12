@@ -23,5 +23,8 @@ data class GetHistoryResponse(
 	val linkProduk: String? = null,
 
 	@field:SerializedName("skin_type")
-	val skinType: String? = null
+	val skinType: String? = null,
+
+	@field:SerializedName("gambar_produk")
+	val gambarProduk: String? = null
 )
