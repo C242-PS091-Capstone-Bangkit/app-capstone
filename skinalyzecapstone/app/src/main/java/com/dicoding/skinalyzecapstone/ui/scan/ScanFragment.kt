@@ -14,17 +14,23 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.datastore.core.DataStore
+import androidx.datastore.dataStoreFile
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
 import androidx.fragment.app.Fragment
 import com.dicoding.skinalyzecapstone.R
 import com.dicoding.skinalyzecapstone.createCustomTempFile
 import com.dicoding.skinalyzecapstone.data.api.ApiConfig
 import com.dicoding.skinalyzecapstone.data.api.ApiServiceScan
+import com.dicoding.skinalyzecapstone.data.pref.UserPreference
 import com.dicoding.skinalyzecapstone.data.response.PredictResponse
 import com.dicoding.skinalyzecapstone.databinding.FragmentScanBinding
 import com.dicoding.skinalyzecapstone.getImageUri
 import com.dicoding.skinalyzecapstone.ui.result.ResultActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -33,6 +39,8 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
+
+
 
 class ScanFragment : Fragment() {
     private lateinit var binding: FragmentScanBinding
@@ -120,6 +128,7 @@ class ScanFragment : Fragment() {
 
 
     private fun postImage(uri: Uri) {
+
         val file = getFileFromUri(uri) ?: run {
             showToast("Failed to retrieve file from URI.")
             return
@@ -127,16 +136,24 @@ class ScanFragment : Fragment() {
 
         val requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
         val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
-        val idUser = "1".toRequestBody("text/plain".toMediaTypeOrNull())
 
         val apiService = ApiConfig.getApiServiceScan()
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiService.predictImage(body, idUser)
+                val dataStore: DataStore<Preferences> = PreferenceDataStoreFactory.create(
+                    produceFile = { requireContext().dataStoreFile("user_prefs.preferences_pb") }
+                )
+
+                // Ambil ID user dari UserPreference dan tampilkan di log
+                val userId = UserPreference.getInstance(dataStore).getSession().first().idUser
+                Log.d("ScanFragment", "User ID melakukan scan: $userId")
+
+                val idUserRequestBody = userId.toRequestBody("text/plain".toMediaTypeOrNull())
+                val response = apiService.predictImage(body, idUserRequestBody)
 
                 // Log the response for debugging
-                Log.d("ScanFragment", "API Response: $response")
+                Log.d("ScanFragment", "User ID received by API: $userId")
 
                 launch(Dispatchers.Main) {
                     navigateToResultActivity(response)
