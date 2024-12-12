@@ -3,10 +3,12 @@ package com.dicoding.skinalyzecapstone
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.dicoding.skinalyzecapstone.data.pref.UserPreference
@@ -49,50 +51,53 @@ class MainActivity : AppCompatActivity() {
 
         var lastSelectedItemId = R.id.navigation_home
 
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.navigation_scan) {
-                clearMenuSelection(navView)
-            } else {
-                navView.menu.findItem(lastSelectedItemId)?.isChecked = true
-            }
-        }
-
-        binding.fab.setOnClickListener {
-            Log.d("FAB_Click", "FAB clicked, navigating to ScanFragment")
-            val options = NavOptions.Builder()
-                .setPopUpTo(R.id.navigation_home, true)
-                .build()
-            navController.navigate(R.id.navigation_scan, null, options)
-            clearMenuSelection(navView)
-            lastSelectedItemId = -1
-        }
+        // Default NavOptions with animations
+        val navOptionsWithAnimation = NavOptions.Builder()
+            .setEnterAnim(R.anim.fade_in)
+            .setExitAnim(R.anim.fade_out)
+            .setPopEnterAnim(R.anim.fade_in)
+            .setPopExitAnim(R.anim.fade_out)
+            .build()
 
         navView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> {
-                    navController.navigate(R.id.navigation_home)
+                    navController.navigate(R.id.navigation_home, null, navOptionsWithAnimation)
                     lastSelectedItemId = R.id.navigation_home
                     true
                 }
                 R.id.navigation_notification -> {
-                    navController.navigate(R.id.navigation_notification)
+                    navController.navigate(R.id.navigation_notification, null, navOptionsWithAnimation)
                     lastSelectedItemId = R.id.navigation_notification
                     true
                 }
                 R.id.navigation_profile -> {
-                    navController.navigate(R.id.navigation_profile)
+                    navController.navigate(R.id.navigation_profile, null, navOptionsWithAnimation)
                     lastSelectedItemId = R.id.navigation_profile
                     true
                 }
                 R.id.navigation_history -> {
-                    navController.navigate(R.id.navigation_history)
+                    navController.navigate(R.id.navigation_history, null, navOptionsWithAnimation)
                     lastSelectedItemId = R.id.navigation_history
                     true
                 }
                 else -> false
             }
         }
+
+        binding.fab.setOnClickListener {
+            Log.d("FAB_Click", "FAB clicked, navigating to ScanFragment")
+            val options = NavOptions.Builder()
+                .setEnterAnim(R.anim.fade_in)
+                .setExitAnim(R.anim.fade_out)
+                .setPopUpTo(R.id.navigation_home, true)
+                .build()
+            navController.navigate(R.id.navigation_scan, null, options)
+            clearMenuSelection(navView)
+            lastSelectedItemId = -1
+        }
     }
+
 
     private fun clearMenuSelection(navView: BottomNavigationView) {
         for (i in 0 until navView.menu.size()) {
