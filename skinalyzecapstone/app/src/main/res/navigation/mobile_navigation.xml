@@ -18,12 +18,6 @@
         tools:layout="@layout/fragment_history" />
 
     <fragment
-        android:id="@+id/navigation_scan"
-        android:name="com.dicoding.skinalyzecapstone.ui.scan.ScanFragment"
-        android:label="@string/title_scan"
-        tools:layout="@layout/fragment_scan" />
-
-    <fragment
         android:id="@+id/navigation_notification"
         android:name="com.dicoding.skinalyzecapstone.ui.notification.NotificationFragment"
         android:label="@string/title_notification"

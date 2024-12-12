@@ -7,25 +7,23 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.dataStoreFile
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
-import androidx.fragment.app.Fragment
 import com.dicoding.skinalyzecapstone.R
 import com.dicoding.skinalyzecapstone.createCustomTempFile
 import com.dicoding.skinalyzecapstone.data.api.ApiConfig
 import com.dicoding.skinalyzecapstone.data.api.ApiServiceScan
 import com.dicoding.skinalyzecapstone.data.pref.UserPreference
 import com.dicoding.skinalyzecapstone.data.response.PredictResponse
-import com.dicoding.skinalyzecapstone.databinding.FragmentScanBinding
+import com.dicoding.skinalyzecapstone.databinding.ActivityScanBinding
 import com.dicoding.skinalyzecapstone.getImageUri
 import com.dicoding.skinalyzecapstone.ui.result.ResultActivity
 import kotlinx.coroutines.CoroutineScope
@@ -40,10 +38,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 
-
-
-class ScanFragment : Fragment() {
-    private lateinit var binding: FragmentScanBinding
+class ScanActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityScanBinding
     private var currentImageUri: Uri? = null
 
     private val requestGalleryLauncher =
@@ -70,13 +66,12 @@ class ScanFragment : Fragment() {
         outState.putParcelable("currentImageUri", currentImageUri) // Save the URI
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityScanBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentScanBinding.inflate(inflater, container, false)
-
-        // Cek dan minta izin
+        // Check and request permissions
         if (!allPermissionsGranted()) {
             requestPermissions(arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_CODE)
         }
@@ -86,8 +81,6 @@ class ScanFragment : Fragment() {
         }
 
         setupListeners()
-
-        return binding.root
     }
 
     private fun setupListeners() {
@@ -102,10 +95,6 @@ class ScanFragment : Fragment() {
         binding.clearButton.setOnClickListener {  // Add this line
             clearImage()
         }
-        binding.cameraButton.setOnClickListener {
-            currentImageUri = getImageUri(requireContext())
-            startCamera()
-        }
     }
 
     private fun clearImage() {
@@ -117,18 +106,22 @@ class ScanFragment : Fragment() {
         requestGalleryLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 
-
     private fun startCamera() {
-        requestCameraLauncher.launch(currentImageUri)
+        currentImageUri = getImageUri(this)
+        currentImageUri?.let {
+            requestCameraLauncher.launch(it)
+        } ?: run {
+            // Handle the case when currentImageUri is null
+            Log.e("ScanActivity", "Failed to get image URI for camera.")
+        }
     }
+
 
     private fun showImage(uri: Uri) { // Modified to accept URI as a parameter
         binding.previewImageView.setImageURI(uri)
     }
 
-
     private fun postImage(uri: Uri) {
-
         val file = getFileFromUri(uri) ?: run {
             showToast("Failed to retrieve file from URI.")
             return
@@ -142,24 +135,24 @@ class ScanFragment : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val dataStore: DataStore<Preferences> = PreferenceDataStoreFactory.create(
-                    produceFile = { requireContext().dataStoreFile("user_prefs.preferences_pb") }
+                    produceFile = { this@ScanActivity.dataStoreFile("user_prefs.preferences_pb") }
                 )
 
-                // Ambil ID user dari UserPreference dan tampilkan di log
+                // Get User ID from UserPreference and log
                 val userId = UserPreference.getInstance(dataStore).getSession().first().idUser
-                Log.d("ScanFragment", "User ID melakukan scan: $userId")
+                Log.d("ScanActivity", "User ID performing scan: $userId")
 
                 val idUserRequestBody = userId.toRequestBody("text/plain".toMediaTypeOrNull())
                 val response = apiService.predictImage(body, idUserRequestBody)
 
                 // Log the response for debugging
-                Log.d("ScanFragment", "User ID received by API: $userId")
+                Log.d("ScanActivity", "User ID received by API: $userId")
 
                 launch(Dispatchers.Main) {
                     navigateToResultActivity(response)
                 }
             } catch (e: Exception) {
-                Log.e("ScanFragment", "Error: ${e.message}", e)
+                Log.e("ScanActivity", "Error: ${e.message}", e)
                 launch(Dispatchers.Main) {
                     showToast("Failed to analyze image. Try again.")
                 }
@@ -168,17 +161,16 @@ class ScanFragment : Fragment() {
     }
 
     private fun navigateToResultActivity(response: PredictResponse) {
-        val intent = Intent(requireContext(), ResultActivity::class.java).apply {
+        val intent = Intent(this, ResultActivity::class.java).apply {
             putExtra(ResultActivity.EXTRA_RESULT, response)
             putExtra(ResultActivity.EXTRA_IMAGE_URI, currentImageUri) // Add this line
         }
         startActivity(intent)
     }
 
-
     private fun getFileFromUri(uri: Uri): File? {
-        val tempFile = createCustomTempFile(requireContext())
-        requireContext().contentResolver.openInputStream(uri)?.use { inputStream ->
+        val tempFile = createCustomTempFile(this)
+        contentResolver.openInputStream(uri)?.use { inputStream ->
             tempFile.outputStream().use { outputStream ->
                 inputStream.copyTo(outputStream)
             }
@@ -188,12 +180,12 @@ class ScanFragment : Fragment() {
 
     private fun allPermissionsGranted() =
         ContextCompat.checkSelfPermission(
-            requireContext(), Manifest.permission.CAMERA
+            this, Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED
 
     private fun showToast(message: String) {
         CoroutineScope(Dispatchers.Main).launch {
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@ScanActivity, message, Toast.LENGTH_SHORT).show()
         }
     }
 

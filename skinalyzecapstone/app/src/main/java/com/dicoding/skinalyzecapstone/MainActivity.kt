@@ -14,6 +14,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.dicoding.skinalyzecapstone.data.pref.UserPreference
 import com.dicoding.skinalyzecapstone.databinding.ActivityMainBinding
 import com.dicoding.skinalyzecapstone.ui.login.LoginActivity
+import com.dicoding.skinalyzecapstone.ui.scan.ScanActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
@@ -86,15 +87,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.fab.setOnClickListener {
-            Log.d("FAB_Click", "FAB clicked, navigating to ScanFragment")
-            val options = NavOptions.Builder()
-                .setEnterAnim(R.anim.fade_in)
-                .setExitAnim(R.anim.fade_out)
-                .build()
-            navController.navigate(R.id.navigation_scan, null, options)
-            clearMenuSelection(navView)
+            Log.d("FAB_Click", "FAB clicked, navigating to ScanActivity")
 
-            navView.selectedItemId = 0
+            // Create an Intent to navigate to ScanActivity
+            val intent = Intent(this@MainActivity, ScanActivity::class.java)
+
+            // Optionally, add extras to the intent if needed
+            // intent.putExtra("key", value)
+
+            startActivity(intent)
         }
     }
 
