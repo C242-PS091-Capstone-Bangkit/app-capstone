@@ -13,6 +13,7 @@
     <string name="camera">Camera</string>
     <string name="scan_now">Scan Now</string>
     <string name="result">Result</string>
+    <string name="app_logo">App Logo</string>
     <string name="empty_image_warning">Please select an image to analyze.</string>
     <string name="message_welcome_page">Let\'s Know Your Skin Condition Better!</string>
     <string name="title_welcome_page">Welcome to Skinalyze!</string>
