@@ -51,7 +51,7 @@ class UserRepository(
 
     // Reminder APIs
     suspend fun createReminder(
-        idUser: Int, // Tambahkan parameter id_user
+        idUser: Int,
         title: String,
         description: String,
         time: String
@@ -67,9 +67,12 @@ class UserRepository(
         return apiServiceGeneral.getRemindersByUserId(idUser)
     }
 
+    suspend fun deleteReminder(id: Int): DeleteReminderResponse {
+        return apiServiceGeneral.deleteReminder(id)
+    }
 
     // History APIs
-    suspend fun getHistoryById(id: Int): List<GetHistoryResponse> { // Ubah tipe data menjadi List
+    suspend fun getHistoryById(id: Int): List<GetHistoryResponse> {
         return apiServiceGeneral.getHistoryById(id)
     }
 
