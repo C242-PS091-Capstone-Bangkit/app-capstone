@@ -1,6 +1,5 @@
 package com.dicoding.skinalyzecapstone.ui.signup
 
-
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -25,7 +24,7 @@ class SignupActivity : AppCompatActivity() {
     private val signupViewModel: SignupViewModel by viewModels {
         ViewModelFactory(
             UserRepository(
-                UserPreference.getInstance(dataStore), // Pastikan dataStore sudah diinisialisasi di Application
+                UserPreference.getInstance(dataStore),
                 ApiConfig.getApiServiceGeneral()
             )
         )
@@ -61,23 +60,21 @@ class SignupActivity : AppCompatActivity() {
             val password = binding.etPassword.text.toString().trim()
 
             when {
-                name.isEmpty() -> {
-                    binding.tilName.error = resources.getString(R.string.name_empty)
-                }
-                email.isEmpty() -> {
-                    binding.tilEmail.error = resources.getString(R.string.email_empty)
-                }
-                password.isEmpty() -> {
-                    binding.tilPassword.error = resources.getString(R.string.password_empty)
-                }
+                name.isEmpty() -> binding.tilName.error = getString(R.string.name_empty)
+                email.isEmpty() -> binding.tilEmail.error = getString(R.string.email_empty)
+                password.isEmpty() -> binding.tilPassword.error = getString(R.string.password_empty)
                 else -> {
-                    binding.tilName.error = null
-                    binding.tilEmail.error = null
-                    binding.tilPassword.error = null
+                    clearErrors()
                     signupViewModel.register(name, email, password)
                 }
             }
         }
+    }
+
+    private fun clearErrors() {
+        binding.tilName.error = null
+        binding.tilEmail.error = null
+        binding.tilPassword.error = null
     }
 
     private fun observeViewModel() {
@@ -86,22 +83,9 @@ class SignupActivity : AppCompatActivity() {
         }
 
         signupViewModel.registerResult.observe(this) { result ->
-            result.onSuccess { response ->
-                Toast.makeText(this, getString(R.string.signup_success), Toast.LENGTH_LONG).show()
-                // Setelah berhasil daftar, langsung login
-                loginAfterSignup(response.registerResponse[0].email, response.registerResponse[0].password)
-            }
-            result.onFailure { throwable ->
-                Toast.makeText(this, throwable.message, Toast.LENGTH_LONG).show()
-            }
-        }
-
-        signupViewModel.loginResult.observe(this) { result ->
             result.onSuccess {
-                Toast.makeText(this, getString(R.string.login_success), Toast.LENGTH_LONG).show()
-                // Arahkan ke halaman utama atau login
-                startActivity(Intent(this, LoginActivity::class.java))
-                finish()
+                Toast.makeText(this, getString(R.string.signup_success), Toast.LENGTH_LONG).show()
+                navigateToLogin()
             }
             result.onFailure { throwable ->
                 Toast.makeText(this, throwable.message, Toast.LENGTH_LONG).show()
@@ -109,7 +93,10 @@ class SignupActivity : AppCompatActivity() {
         }
     }
 
-    private fun loginAfterSignup(email: String, password: String) {
-        signupViewModel.login(email, password)
+    private fun navigateToLogin() {
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 }
