@@ -42,7 +42,7 @@ class EditProfile : AppCompatActivity() {
 
         // Tombol Edit Username
         editUsernameButton.setOnClickListener {
-            val intent = Intent(this, EditUsername::class.java)
+            val intent = Intent(this, EditUsernameActivity::class.java)
             startActivity(intent)
         }
 

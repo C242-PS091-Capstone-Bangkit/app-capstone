@@ -29,7 +29,7 @@ class UserRepository(
         return apiServiceGeneral.getUsers()
     }
 
-    suspend fun getUserById(id: Int): UserResponse {
+    suspend fun getUserById(id: Int): GetUserIdResponse {
         return apiServiceGeneral.getUserById(id)
     }
 
@@ -37,8 +37,8 @@ class UserRepository(
         return apiServiceGeneral.registerUser(username, email, password)
     }
 
-    suspend fun editUser(id: Int, username: String, email: String, password: String): EditUserResponse {
-        return apiServiceGeneral.editUser(id, username, email, password)
+    suspend fun editUser(id: Int, username: String, email: String): EditUserResponse {
+        return apiServiceGeneral.editUser(id, username, email)
     }
 
     suspend fun deleteUser(id: Int): EditUserResponse {

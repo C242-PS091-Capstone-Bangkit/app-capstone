@@ -5,6 +5,7 @@ import com.dicoding.skinalyzecapstone.data.response.DeleteHistoryResponse
 import com.dicoding.skinalyzecapstone.data.response.DeleteReminderResponse
 import com.dicoding.skinalyzecapstone.data.response.EditUserResponse
 import com.dicoding.skinalyzecapstone.data.response.GetHistoryResponse
+import com.dicoding.skinalyzecapstone.data.response.GetUserIdResponse
 import com.dicoding.skinalyzecapstone.data.response.LoginResponse
 import com.dicoding.skinalyzecapstone.data.response.RegisterResponse
 import com.dicoding.skinalyzecapstone.data.response.ReminderResponse
@@ -29,7 +30,7 @@ interface ApiServiceGeneral {
     @GET("users/{id}")
     suspend fun getUserById(
         @Path("id") id: Int
-    ): UserResponse
+    ): GetUserIdResponse
 
     @FormUrlEncoded
     @POST("users")
@@ -45,7 +46,6 @@ interface ApiServiceGeneral {
         @Path("id") id: Int,
         @Field("username") username: String,
         @Field("email") email: String,
-        @Field("password") password: String
     ): EditUserResponse
 
     @DELETE("users/{id}")

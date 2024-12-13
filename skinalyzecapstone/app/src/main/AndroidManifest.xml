@@ -39,7 +39,7 @@
             android:name=".ui.help.HelpActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.profile.EditUsername"
+            android:name=".ui.profile.EditUsernameActivity"
             android:exported="false" />
         <activity
             android:name=".ui.profile.EditProfile"
