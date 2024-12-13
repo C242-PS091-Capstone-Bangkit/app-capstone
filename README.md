@@ -64,3 +64,15 @@
   Repository for APIs and backend services powering Skinalyze.
 
 ---
+
+## 📸 Application Screenshots  
+
+| **Splash Screen**                          | **Home Screen**                        | **Scan Image**         |  
+|------------------------------------------|------------------------------------------|------------------------------------------|  
+| <img width="304" alt="Splash2" src="https://github.com/user-attachments/assets/89007739-1d55-44ae-a6b5-32fea2f1e3c3" /> | <img width="304" alt="Home" src="https://github.com/user-attachments/assets/caad4a6a-99ee-4b71-98fd-66205eec4dbb" /> | <img width="304" alt="Scan" src="https://github.com/user-attachments/assets/6116b6fa-cbd5-4bd7-92b3-b5daaf5d9604" /> |  
+
+| **Scan Result**                       | **History Log**                          | **Profile**         |   
+|------------------------------------------|------------------------------------------|------------------------------------------|  
+| <img width="304" alt="Rekomendasi scroll" src="https://github.com/user-attachments/assets/f3a5dda8-16d7-45fb-88f3-991fa6e9ba4b" /> | <img width="304" alt="Your History" src="https://github.com/user-attachments/assets/811cb2c4-7b80-4af0-aa5b-e93b81329d1a" /> | <img width="304" alt="Profile" src="https://github.com/user-attachments/assets/341acaa2-facc-40b7-9740-05e20fdf2ce1" /> |
+
+--- 
