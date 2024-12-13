@@ -1,14 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginBottom="0dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="start">
 
+        <!-- Header Section -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -19,35 +24,85 @@
             android:padding="16dp"
             android:background="@drawable/header_background" />
 
+        <!-- Help Section -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Help"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:padding="16dp" />
+            android:paddingTop="24dp"
+            android:paddingBottom="8dp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="How to use this app:"
+            android:text="@string/how_to_use_app"
             android:textSize="16sp"
-            android:padding="16dp" />
+            android:lineSpacingExtra="4dp" />
 
+        <!-- Contact Section -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Contact us"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:padding="16dp" />
+            android:paddingTop="24dp"
+            android:paddingBottom="8dp" />
+
+        <!-- Mobile Development Team -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mobile Development Team:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:paddingBottom="4dp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="skynalyze@gmail.com"
+            android:text="agungcandraw21@gmail.com\nprajnadharmajati@gmail.com"
             android:textSize="16sp"
-            android:padding="16dp" />
+            android:lineSpacingExtra="4dp" />
+
+        <!-- Cloud Computing Team -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cloud Computing Team:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:paddingTop="16dp"
+            android:paddingBottom="4dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="gedeardhiyana@gmail.com\nsindhuwedana@gmail.com"
+            android:textSize="16sp"
+            android:lineSpacingExtra="4dp" />
+
+        <!-- Machine Learning Team -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Machine Learning Team:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:paddingTop="16dp"
+            android:paddingBottom="4dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="gitasriadnyani@gmail.com\nchristinaayuni3@gmail.com\nindricahyani548@gmail.com"
+            android:textSize="16sp"
+            android:lineSpacingExtra="4dp" />
 
     </LinearLayout>
 </ScrollView>

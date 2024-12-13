@@ -73,8 +73,17 @@
     <string name="skin_condition_label">Anda memiliki kulit berkondisi  </string>
     <string name="clear_image">Clear Image</string>
     <string name="scan_your_skin_now">Scan your skin Now!</string>
-
-
+    <string name="how_to_use_app">
+        How to use this app:\n
+        1. Scan your face or select an image from the gallery\n
+        2. Scan now and wait for the result\n
+        3. Choose your skincare from the recommendation\n
+        4. Set a reminder for your skincare routine\n
+        5. Check your reminders and history\n\n
+        You can also edit your profile username and logged out your account in the Profile section.\n\n
+        Note: Don’t forget to grant permission for accessing the gallery and internal files, and please use a stable internet connection.\n
+        If you need any help with this app, please contact us below:
+    </string>
     <string name="signup">Daftar</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

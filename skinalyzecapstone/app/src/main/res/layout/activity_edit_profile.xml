@@ -95,7 +95,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Email"
+                    android:text="Email cant be changed"
                     android:layout_marginStart="16dp"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -120,40 +120,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Logout"
-                    android:layout_marginStart="16dp"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-            <!-- Bagian Others -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Others"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp" />
-
-            <!-- Tombol Delete Account -->
-            <LinearLayout
-                android:id="@+id/deleteAccoutButton"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:orientation="horizontal"
-                android:padding="12dp"
-                android:background="@drawable/card_background"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="8dp">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/delete" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Delete Account"
                     android:layout_marginStart="16dp"
                     android:textSize="16sp" />
             </LinearLayout>
